@@ -12,21 +12,20 @@ from pathlib import Path
 
 import click
 
-from .converter import MeSHConverter
-from .download import download_mesh
-from .reader import MeSHReader
-from .writer import write_yaml
+from invenio_subjects_lcsh.extractor import LCSHExtractor
+from invenio_subjects_lcsh.writer import LCSHWriter
 
 
 @click.command()
 def main():
     """Generate new subjects_lcsh.yaml file."""
-    filepath = download_mesh()
+    current_dir = Path(__file__).parent
+    # Assume file is in download/
+    filepath = current_dir / "download/subjects.skosrdf.jsonld"
 
-    reader = MeSHReader(filepath, filter='topics')
+    extractor = LCSHExtractor(filepath)
 
-    converter = MeSHConverter(reader)
+    output_filepath = current_dir / "vocabularies/subjects_lcsh.yaml"
+    LCSHWriter(extractor).yaml(output_filepath)
 
-    filepath = write_yaml(converter)
-
-    print(f"MeSH terms written here {filepath}")
+    print(f"LCSH terms have been written here {output_filepath}")
