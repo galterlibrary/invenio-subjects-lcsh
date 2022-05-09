@@ -5,9 +5,6 @@ on:
     branches: master
   pull_request:
     branches: master
-  schedule:
-    # * is a special character in YAML so you have to quote this string
-    - cron:  '0 3 * * 6'
   workflow_dispatch:
     inputs:
       reason:
@@ -20,42 +17,25 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-          # You can add/remove combinations e.g. `dev` requirements or `postgresql13` by adding
-          # a new item to the following lists.
-          # You can see the complete list of services and versions that are available at:
-          # https://docker-services-cli.readthedocs.io/en/latest/configuration.html
-          python-version: [3.6, 3.7, 3.8, 3.9]
-          requirements-level: [min, pypi]
-          # cache-service: [redis]
-          # db-service: [postgresql9, postgresql11, mysql5, mysql8]
-          # mq-service: [rabbitmq, redis]
-          # search-service: [elasticsearch6, elasticsearch7]
-
-          exclude:
-            # Add combinations to this list that should be excluded from the final
-            # build. Doing this will help keeping the number of jobs down.
-            - python-version: 3.8
-              requirements-level: min
-
-            - python-version: 3.9
-              requirements-level: min
+          python-version: [3.7, 3.8, 3.9]
+          requirements-level: [pypi]
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Generate dependencies
         run: |
           python -m pip install --upgrade pip setuptools py wheel requirements-builder
-          requirements-builder -e --level=${{ matrix.requirements-level }} setup.py > .${{ matrix.requirements-level }}-${{ matrix.python-version }}-requirements.txt
+          requirements-builder -e all --level=${{ matrix.requirements-level }} setup.py > .${{ matrix.requirements-level }}-${{ matrix.python-version }}-requirements.txt
 
       - name: Cache pip
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('.${{ matrix.requirements-level }}-${{ matrix.python-version }}-requirements.txt') }}

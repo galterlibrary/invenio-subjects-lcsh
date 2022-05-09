@@ -1,27 +1,33 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 Northwestern University.
+# Copyright (C) 2021-2022 Northwestern University.
 #
 # invenio-subjects-lcsh is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""MeSH subjects_mesh.yaml writer."""
-
-from pathlib import Path
-
-import yaml
+"""LCSH subjects writer."""
 
 
-def write_yaml(
-    entries,
-    filepath=Path(__file__).parent / "vocabularies/subjects_mesh.yaml"
-):
-    """Write the MeSH yaml file.
+class LCSHWriter:
+    """Write the vocabulary out."""
 
-    Return filepath to written file.
-    """
-    with open(filepath, "w") as f:
-        yaml.dump(list(entries), f)
+    def __init__(self, iterable):
+        """Constructor.
 
-    return filepath
+        :param iterable: iterable of {id, scheme, subject}
+        """
+        self.iterable = iterable
+
+    def yaml(self, filepath):
+        """Write out to yaml.
+
+        We don't rely on the yaml library to write out the values since it
+        can't stream-write. Because the values are simple, this is a
+        reasonable choice.
+        """
+        with open(filepath, 'w') as f:
+            for e in self.iterable:
+                f.write(f"- id: {e['id']}\n")
+                f.write(f"  scheme: {e['scheme']}\n")
+                f.write(f"  subject: {e['subject']}\n")

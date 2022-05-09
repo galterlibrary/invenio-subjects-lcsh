@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 Northwestern University.
+# Copyright (C) 2021-2022 Northwestern University.
 #
 # invenio-subjects-lcsh is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""MeSH subject terms for InvenioRDM."""
+"""LCSH subject terms for InvenioRDM."""
 
-from .version import __version__
 
-__all__ = ('__version__')
+__version__ = '2021.09.19'
