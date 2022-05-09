@@ -12,4 +12,4 @@ This file is imported by ``invenio_subjects_lcsh.__init__``,
 and parsed by ``setup.py``.
 """
 
-__version__ = '2021.09.19'
+__version__ = '2022.05.07'
