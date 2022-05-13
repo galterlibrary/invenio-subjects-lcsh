@@ -28,6 +28,7 @@ class LCSHWriter:
         """
         with open(filepath, 'w') as f:
             for e in self.iterable:
+                subject = e['subject'].replace('"', r'\"')
                 f.write(f"- id: {e['id']}\n")
                 f.write(f"  scheme: {e['scheme']}\n")
-                f.write(f"  subject: {e['subject']}\n")
+                f.write(f"  subject: \"{subject}\"\n")
