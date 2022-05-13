@@ -58,6 +58,16 @@ def test_write():
             "scheme": "LCSH",
             "subject": "Tacos"
         },
+        {
+            "id": 'http://id.loc.gov/authorities/subjects/sh00000275',
+            "scheme": "LCSH",
+            "subject": "Shell Lake (Wis. : Lake)"
+        },
+        {
+            "id": 'http://id.loc.gov/authorities/subjects/sh00008126',
+            "scheme": "LCSH",
+            "subject": "Half-Circle \"V\" Ranch (Wyo.)"
+        },
     ]
 
     LCSHWriter(entries).yaml(filepath)
