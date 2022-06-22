@@ -30,5 +30,6 @@ recursive-include docs *.rst
 recursive-include docs *.txt
 recursive-include docs Makefile
 recursive-include invenio_subjects_lcsh *.html
+recursive-include invenio_subjects_lcsh *.jsonl
 recursive-include invenio_subjects_lcsh *.yaml *.yml
 recursive-include tests *.py
