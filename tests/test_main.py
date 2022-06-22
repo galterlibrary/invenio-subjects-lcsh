@@ -6,9 +6,8 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
+import json
 from pathlib import Path
-
-import yaml
 
 from invenio_subjects_lcsh.extractor import LCSHExtractor
 from invenio_subjects_lcsh.writer import LCSHWriter
@@ -45,8 +44,14 @@ def test_lcsh_extractor():
     assert expected == received
 
 
+def read_jsonl(filepath):
+    """Read jsonl."""
+    with open(filepath) as f:
+        for line in f:
+            yield json.loads(line)
+
+
 def test_write():
-    filepath = Path(__file__).parent / "test_lcsh_subjects.yaml"
     entries = [
         {
             "id": 'http://id.loc.gov/authorities/subjects/sh00000011',
@@ -69,11 +74,11 @@ def test_write():
             "subject": "Half-Circle \"V\" Ranch (Wyo.)"
         },
     ]
+    filepath = Path(__file__).parent / "test_lcsh_subjects.jsonl"
 
-    LCSHWriter(entries).yaml(filepath)
+    LCSHWriter(entries).jsonl(filepath)
 
-    with open(filepath) as f:
-        read_entries = yaml.safe_load(f)
+    read_entries = [e for e in read_jsonl(filepath)]
     assert entries == read_entries
 
     try:
