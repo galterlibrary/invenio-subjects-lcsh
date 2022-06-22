@@ -8,6 +8,8 @@
 
 """LCSH subjects writer."""
 
+import json
+
 
 class LCSHWriter:
     """Write the vocabulary out."""
@@ -19,16 +21,12 @@ class LCSHWriter:
         """
         self.iterable = iterable
 
-    def yaml(self, filepath):
-        """Write out to yaml.
+    def jsonl(self, filepath):
+        """Write out to jsonl.
 
-        We don't rely on the yaml library to write out the values since it
-        can't stream-write. Because the values are simple, this is a
-        reasonable choice.
+        Reading from .jsonl is ~149x faster than reading from pyyaml.load.
         """
         with open(filepath, 'w') as f:
             for e in self.iterable:
-                subject = e['subject'].replace('"', r'\"')
-                f.write(f"- id: {e['id']}\n")
-                f.write(f"  scheme: {e['scheme']}\n")
-                f.write(f"  subject: \"{subject}\"\n")
+                json.dump(e, f)
+                f.write("\n")
