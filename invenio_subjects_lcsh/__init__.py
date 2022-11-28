@@ -9,4 +9,4 @@
 """LCSH subject terms for InvenioRDM."""
 
 
-__version__ = '2022.11.18'
+__version__ = '2022.11.23'
