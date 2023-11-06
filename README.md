@@ -1,6 +1,6 @@
 # invenio-subjects-lcsh
 
-LCSH subject terms for InvenioRDM
+*LCSH subject terms for InvenioRDM*
 
 Install this extension to get [Library of Congress Subject Headings](https://id.loc.gov/authorities/subjects.html) into your instance.
 
@@ -8,16 +8,21 @@ Install this extension to get [Library of Congress Subject Headings](https://id.
 
 From your instance directory:
 
-    pipenv install invenio-subjects-lcsh
+```bash
+pipenv install invenio-subjects-lcsh
+```
 
 This will add it to your Pipfile.
 
-### Versions
+## Versions
 
-This repository follows [calendar versioning](https://calver.org/):
+This repository follows [calendar versioning](https://calver.org/) for year and month:
 
-`2021.06.18` is both a valid semantic version and an indicator of the year-month corresponding to the loaded LCSH terms.
+`2021.06.18` is both a valid semantic version and an indicator of the year-month corresponding to the loaded terms.
+`18` here is a patch number (not a day).
 
+So far the package is compatible with InvenioRDM 9.1+'s subjects "ABI". If there is a breaking change, a compatibility
+table will be provided to indicate which version is compatible with with InvenioRDM's "ABI".
 
 ## Usage
 
@@ -25,34 +30,73 @@ There are 2 types of users for this package. Maintainers of the package and inst
 
 ### Instance administrators
 
-For instance administrators, after you have installed the extension as per the steps above, you are done. It should just work.
+For instance administrators, after you have installed the extension as per the steps above, you will want to reload your instance's fixtures: `pipenv run invenio rdm-records fixtures`. This will install the new terms in your instance.
 
-### TODO -- Maintainers
+Updating existing terms currently requires manual replacement.
 
-When a new list of LCSH term comes out, this package should be updated. Here we show how.
+### Maintainers
 
-0- Make sure you have cloned this package. Then install it locally with:
+When a new list of MeSH term comes out, this package should be updated. Here we show how.
 
-    make install
+0. Install this package locally with the `dev` extra:
 
-1- Update:
+```bash
+pipenv run pip install -e .[dev]
+```
 
-    make update
+1. Use the installed `galter-subjects-utils` tool to get the new list:
+
+```bash
+pipenv run galter-subjects-utils lcsh --output-file invenio_subjects_lcsh/vocabularies/subjects_lcsh.jsonl
+```
 
    This will
 
-   1- Download the new list (TODO - For now download it manually and place it in `invenio_subjects_lcsh/download/data/`)
-   2- Convert terms to InvenioRDM subjects format
-   3- Write those to `invenio_subjects_lcsh/vocabularies/subjects_lcsh.yaml` file
+   1. Download the new list(s)
+   2. Read it filtering for topics
+   3. Convert terms to InvenioRDM subjects format
+   4. Write those to the specified file
 
-3- Run the tests just to make sure everything is still good:
+2. Check the manifest (it should typically be all good)
 
-    make test
+```bash
+pipenv run inv check-manifest
+```
 
-4- When you are happy with the list, bump the version in `invenio_subjects_lcsh/version.py` and release it.
+3. When you are happy with the list, bump the version and release it.
 
+## Development
 
-## Future Ideas
+Install the project in editable mode with `dev` dependencies in an isolated virtualenv (`(venv)` denotes that going forward):
 
-- InvenioRDM doesn't have a way to update pre-existing subjects yet. Once there is one,
-  this package should provide the functionality to update LCSH terms.
+```bash
+(venv) pip install -e .[dev]
+# or if using pipenv
+pipenv run pip install -e .[dev]
+```
+
+Run tests:
+
+```bash
+(venv) invoke test
+# or shorter
+(venv) inv test
+# or if using pipenv
+pipenv run inv test
+```
+
+Check manifest:
+
+```bash
+(venv) inv check-manifest
+# or if using pipenv
+pipenv run inv check-manifest
+```
+
+Clean out artefacts:
+
+```bash
+(venv) inv clean
+# or if using pipenv
+pipenv run inv clean
+```
