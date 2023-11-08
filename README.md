@@ -36,7 +36,7 @@ Updating existing terms currently requires manual replacement.
 
 ### Maintainers
 
-When a new list of MeSH term comes out, this package should be updated. Here we show how.
+This package should probably be updated on a yearly basis. Here we show how.
 
 0. Install this package locally with the `dev` extra:
 
