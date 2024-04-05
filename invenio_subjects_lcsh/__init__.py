@@ -7,6 +7,3 @@
 # details.
 
 """LCSH subject terms for InvenioRDM."""
-
-
-__version__ = '2023.11.2'

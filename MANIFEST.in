@@ -16,6 +16,6 @@ recursive-include .github/workflows *.yml
 
 # added by check-manifest
 include *.md
-recursive-include invenio_subjects_lcsh *.jsonl
+recursive-include invenio_subjects_lcsh *.csv
 recursive-include invenio_subjects_lcsh *.yaml *.yml
 recursive-include tests *.py
