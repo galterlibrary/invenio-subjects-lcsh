@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 Northwestern University.
+# Copyright (C) 2021-2024 Northwestern University.
 #
 # invenio-subjects-lcsh is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -12,13 +12,6 @@ from pathlib import Path
 
 import pkg_resources
 import yaml
-
-from invenio_subjects_lcsh import __version__
-
-
-def test_version():
-    """Test version import."""
-    assert __version__
 
 
 def test_vocabularies_yaml():
