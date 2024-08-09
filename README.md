@@ -43,11 +43,15 @@ Alternatively, or if you want to update your already loaded subjects to a new li
 ```bash
 # In your instance's project
 # Download up-to-date listings
-pipenv run invenio galter_subjects lcsh download -d /path/to/downloads/storage/
-# Generate file containg deltas to transition your instance to the downloaded listing
-pipenv run invenio galter_subjects lcsh deltas -d /path/to/downloads/storage/ -o /path/to/deltas_lcsh.csv
+invenio galter_subjects lcsh download -d /path/to/downloads/storage/
+# Generate deprecated entries - metadata expert COULD look at them
+invenio galter_subjects lcsh deprecated -d /path/to/downloads/storage/
+# Generate replacement entries from those - metadata expert COULD look at them
+invenio galter_subjects lcsh replacements /path/to/downloads/storage/replacements.csv
+# Generate file containing deltas to transition your instance to the downloaded listing - metadata expert SHOULD look at them
+invenio galter_subjects lcsh deltas -d /path/to/downloads/storage/ -o /path/to/deltas_lcsh.csv
 # Update your instance - *this operation will modify your instance*
-pipenv run invenio galter_subjects update /path/to/deltas_lcsh.csv
+invenio galter_subjects update /path/to/deltas_lcsh.csv
 ```
 
 Look at the help text for these commands to see additional options that can be passed.
@@ -59,20 +63,18 @@ When a new list of LCSH terms comes out, this package should be updated to provi
 
 **Pre-requisite/Context**
 
-Maintaining the vocabulary file doesn't apriori need any Inveniordm functionality, but updating an instance does and
-as such this project depends on `invenio-app-rdm`. In turn, because of the plugin system of InvenioRDM, this dependency requires
-`invenio-search[X]` (where X is `elasticsearch7` or `opensearch1` or `opensearch2`) to be installed. It has to be installed separately because this project makes no assumption about the document engine used by the instance. So, even for maintainers of this project, `invenio-search` with an appropriate extra (we choose `elasticsearch2` but it is inconsequential) needs to be installed separately to update the vocabulary file.
+[Install the distribution package for development](#development) before you do anything.
 
 **Commands**
 
-Once you have that dependency installed, you can run the following commands:
+Once you have that dependency installed, you can run the following commands (`(venv)` denotes the isolated environment):
 
 ```bash
 # In this project
 # Download up-to-date listings
-pipenv run invenio galter_subjects lcsh download -d /path/to/downloads/storage/
+(venv) invenio galter_subjects lcsh download -d /path/to/downloads/storage/
 # Generate file containing initial listing
-pipenv run invenio galter_subjects lcsh file -d /path/to/downloads/storage/ -o invenio_subjects_lcsh/vocabularies/subjects_lcsh.csv
+(venv) invenio galter_subjects lcsh file -d /path/to/downloads/storage/ -o invenio_subjects_lcsh/vocabularies/subjects_lcsh.csv
 ```
 
 When you are happy with the list, bump the version in `pyproject.toml` and release it.
