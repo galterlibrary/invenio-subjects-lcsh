@@ -1,5 +1,9 @@
 # Changes
 
+Version 2024.1.1 (released 2024-08-09)
+
+- make compatible with InvenioRDM v12
+
 Version 2022.11.23 (released 2022-11-28)
 
 - Added missing terms found in export of NU's repository.
