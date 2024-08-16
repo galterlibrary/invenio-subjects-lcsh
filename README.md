@@ -2,6 +2,10 @@
 
 *LCSH subject terms for InvenioRDM*
 
+<a href="https://pypi.org/project/invenio-subjects-lcsh/">
+  <img src="https://img.shields.io/pypi/v/invenio-subjects-lcsh.svg">
+</a>
+
 Install this extension to get [Library of Congress Subject Headings](https://id.loc.gov/authorities/subjects.html) into your instance.
 
 Note that this list excludes `-781` geographical variations as it's not their original intent to be independent tagging terms.
@@ -32,11 +36,11 @@ This repository follows [calendar versioning](https://calver.org/) for year and 
 
 ## Usage
 
-There are 2 types of users for this package. Maintainers of the package and instance administrators.
+There are 2 types of users for this package. Maintainers of the package and instance operators.
 
 ### Update terms in an instance
 
-For instance administrators, after you have installed the extension as per the steps above, you will want to reload your instance's fixtures: `pipenv run invenio rdm-records fixtures`. This will install the new terms in your instance.
+For instance operators, after you have installed the extension as per the steps above, you will want to reload your instance's fixtures: `pipenv run invenio rdm-records fixtures`. This will install the new terms in your instance.
 
 Alternatively, or if you want to update your already loaded subjects to a new listing (e.g. from one year's list to another), you can update your instance's LCSH subjects as per below. Updating subjects this way takes care of everything for you: the subjects themselves and the records/drafts using those subjects. **WARNING** This operation can _remove_ subjects.
 
