@@ -21,6 +21,21 @@ pipenv install invenio-subjects-lcsh
 This will add it to your Pipfile.
 
 ## Versions
+**From 2025.6.4.1 onwards**
+
+This package follows the following format for versions: `YYYY.mm.dd.patch` where
+
+- `YYYY.mm.dd` is the date of retrieval of the LCSH terms with `mm` and `dd` NOT being 0-prefixed.
+- `patch` is the patch number (0-indexed) so that multiple releases can be done on the same day (bug/security fixes)
+
+This follows [calendar versioning](https://calver.org/) (for year, month, and day) and adds a patch number at the end. The package is typically updated on a quarterly basis. The following are illustrative (fictitious) examples of how to understand the versioning of this distribution package:
+
+| Last LCSH update included | patch number | version of this project |
+| ------------------------- | ------------ | ----------------------- |
+| 2025-06-31                | 2            | 2025.6.31.2             |
+| 2025-12-01                | 0            | 2025.12.1.0             |
+
+**Prior to 2025.6.4.1**
 
 This repository follows [calendar versioning](https://calver.org/) for year and month. It does a "best effort" attempt at tracking the LCSH updates in an *up-to-and-including* version date manner. The following are illustrative cases of how to understand the versioning of this distribution package:
 
@@ -49,11 +64,11 @@ Alternatively, or if you want to update your already loaded subjects to a new li
 # Download up-to-date listings
 invenio galter_subjects lcsh download -d /path/to/downloads/storage/
 # Generate deprecated entries - metadata expert COULD look at them
-invenio galter_subjects lcsh deprecated -d /path/to/downloads/storage/
+invenio galter_subjects lcsh deprecated /path/to/downloads/storage/subjects.skosrdf.jsonld --output-file /path/to/deprecated.csv
 # Generate replacement entries from those - metadata expert COULD look at them
-invenio galter_subjects lcsh replacements /path/to/downloads/storage/replacements.csv
+invenio galter_subjects lcsh replacements /path/to/deprecated.csv --output-file /path/to/replacements.csv
 # Generate file containing deltas to transition your instance to the downloaded listing - metadata expert SHOULD look at them
-invenio galter_subjects lcsh deltas -d /path/to/downloads/storage/ -o /path/to/deltas_lcsh.csv
+invenio galter_subjects lcsh deltas --subjects-file /path/to/downloads/storage/subjects.skosrdf.jsonld --replacements-file /path/to/replacements.csv -o /path/to/deltas_lcsh.csv
 # Update your instance - *this operation will modify your instance*
 invenio galter_subjects update /path/to/deltas_lcsh.csv
 ```
@@ -91,6 +106,9 @@ Install the project in editable mode with `dev` dependencies in an isolated virt
 (venv) pip install -e .[dev]
 # or if using pipenv
 pipenv run pip install -e .[dev]
+# or if using uv
+uv venv
+uv pip install -e .[dev]
 ```
 
 Run tests:
@@ -101,6 +119,8 @@ Run tests:
 (venv) inv test
 # or if using pipenv
 pipenv run inv test
+# or if using uv
+uv run inv test
 ```
 
 Check manifest:
@@ -109,6 +129,8 @@ Check manifest:
 (venv) inv check-manifest
 # or if using pipenv
 pipenv run inv check-manifest
+# or if using uv
+uv run inv check-manifest
 ```
 
 Clean out artefacts:
@@ -117,4 +139,6 @@ Clean out artefacts:
 (venv) inv clean
 # or if using pipenv
 pipenv run inv clean
+# or if using uv
+uv run inv clean
 ```
