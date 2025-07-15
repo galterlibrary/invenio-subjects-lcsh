@@ -8,9 +8,9 @@
 
 """Test subjects extension conforms to subjects extension interface."""
 
-import importlib
 from pathlib import Path
 
+import importlib_metadata  # transitionary until past Python 3.9
 import yaml
 
 
@@ -18,7 +18,7 @@ def test_vocabularies_yaml():
     """Test vocabularies.yaml structure."""
     extensions = [
         ep.load() for ep in
-        importlib.metadata.entry_points(group='invenio_rdm_records.fixtures')
+        importlib_metadata.entry_points(group='invenio_rdm_records.fixtures')
     ]
 
     assert len(extensions) == 1
