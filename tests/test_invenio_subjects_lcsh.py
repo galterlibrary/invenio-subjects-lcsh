@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021-2024 Northwestern University.
+# Copyright (C) 2021-2025 Northwestern University.
 #
 # invenio-subjects-lcsh is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -8,9 +8,9 @@
 
 """Test subjects extension conforms to subjects extension interface."""
 
+import importlib
 from pathlib import Path
 
-import pkg_resources
 import yaml
 
 
@@ -18,7 +18,7 @@ def test_vocabularies_yaml():
     """Test vocabularies.yaml structure."""
     extensions = [
         ep.load() for ep in
-        pkg_resources.iter_entry_points('invenio_rdm_records.fixtures')
+        importlib.metadata.entry_points(group='invenio_rdm_records.fixtures')
     ]
 
     assert len(extensions) == 1
