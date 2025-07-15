@@ -123,6 +123,18 @@ pipenv run inv test
 uv run inv test
 ```
 
+Test compatibility with the pre-release version of InvenioRDM (invenio-app-rdm):
+
+```bash
+# Step 1 - install the pre-release dependencies
+(venv) pip install --pre -e .[dev_pre]
+# Step 2 - Run the pre-release tests
+(venv) inv test
+# if using uv run:
+uv run --extra dev_pre --prerelease=allow inv test
+```
+
+
 Check manifest:
 
 ```bash
