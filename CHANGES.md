@@ -1,5 +1,10 @@
 # Changes
 
+Version 2025.6.4.2 (released 2025-07-15)
+
+- Bump galter-subjects-utils
+- Make compatible with v13
+
 Version 2025.6.4.1 (released 2025-06-05)
 
 - Bump galter-subjects-utils
