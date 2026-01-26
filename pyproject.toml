@@ -52,6 +52,9 @@ dev_pre = [
 [project.entry-points."invenio_rdm_records.fixtures"]
 invenio_subjects_lcsh = "invenio_subjects_lcsh.vocabularies"
 
+[project.entry-points."galter_subjects_utils.cli"]
+invenio_subjects_lcsh = "invenio_subjects_lcsh.cli:lcsh"
+
 [tool.setuptools]
 packages = ["invenio_subjects_lcsh", "invenio_subjects_lcsh.vocabularies"]
 
