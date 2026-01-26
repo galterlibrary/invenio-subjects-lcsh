@@ -1,5 +1,11 @@
 # Changes
 
+Version 2026.1.23.1 (released 2026-01-27)
+
+- Move LCSH implementation from galter-subjects-utils to this repo
+- update LCSH starter vocabulary file
+- Confirm support of Python 3.14
+
 Version 2025.6.4.2 (released 2025-07-15)
 
 - Bump galter-subjects-utils

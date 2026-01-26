@@ -18,4 +18,4 @@ recursive-include .github/workflows *.yml
 include *.md
 recursive-include invenio_subjects_lcsh *.csv
 recursive-include invenio_subjects_lcsh *.yaml *.yml
-recursive-include tests *.py
+prune tests
