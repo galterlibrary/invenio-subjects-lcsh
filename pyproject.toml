@@ -21,7 +21,7 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
-    "galter-subjects-utils>=0.7.0,<2.0",
+    "galter-subjects-utils>=0.9.0,<2.0",
 ]
 description = "LCSH subject terms for InvenioRDM"
 keywords = ["invenio", "inveniordm", "subjects", "LCSH"]
