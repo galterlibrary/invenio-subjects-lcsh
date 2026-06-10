@@ -21,8 +21,12 @@ from galter_subjects_utils.reader import get_rdm_subjects, read_csv, read_jsonl
 from galter_subjects_utils.writer import write_csv
 
 from .adapter import generate_replacements
-from .converter import LCSHRDMConverter, raw_to_deprecated
+from .converter import LCSHRDMConverter
 from .downloader import LCSHDownloader
+from .mads_rdf_jsonld import (
+    enhance_replacements_w_new_subjects,
+    topics_to_replacements,
+)
 from .scheme import LCSHScheme
 
 defaults = {
@@ -99,10 +103,8 @@ def to_lcsh_converter_kwargs(downloader):
 )
 def lcsh_file(**parameters):
     """Generate new LCSH subjects file."""
-    # Download
     downloader_kwargs = to_lcsh_downloader_kwargs(parameters)
     downloader = LCSHDownloader(**downloader_kwargs)
-    downloader.download()
 
     # Convert
     converter_kwargs = to_lcsh_converter_kwargs(downloader)
@@ -122,7 +124,7 @@ def lcsh_file(**parameters):
     print(f"LCSH terms written here {filepath}")
 
 
-@lcsh.command("deprecated")
+@lcsh.command("replacements")
 @click.argument(
     "subjects-file",
     type=click.Path(path_type=Path, exists=True, dir_okay=False),
@@ -130,12 +132,17 @@ def lcsh_file(**parameters):
 @click.option(
     "--since", "-s", default=None, help="Filter for YYYY-MM-DD and later."
 )
-@click.option("--output-file", "-o", type=click.Path(path_type=Path))
-def lcsh_deprecated(**parameters):
-    """Generate CSV file of raw deprecated LCSH topics.
+@click.option(
+    "--output-file", "-o", type=click.Path(path_type=Path),
+    default=Path.cwd() / "replacements_lcsh.csv"
+)
+def lcsh_replacements(**parameters):
+    """Generate (initial) CSV file of deprecated+replacement LCSH topics.
 
     This file is then parsed by a metadata expert and potentially edited
-    for future use in lcsh_deltas.
+    for subsequent use in lcsh_deltas. In particular, metadata experts
+    should select the id + subject (if any) to replace a deprecated heading
+    that has no or multiple replacement options for each such heading.
     """
     fp_of_subjects = parameters["subjects_file"].expanduser()
 
@@ -143,53 +150,22 @@ def lcsh_deprecated(**parameters):
     since = datetime.strptime(since, "%Y-%m-%d") if since else None
 
     topics_raw = read_jsonl(fp_of_subjects)
-    deprecations = raw_to_deprecated(topics_raw, since)
+    # deprecated dicts with replacement id only
+    replacements = topics_to_replacements(topics_raw, since)
+    # fill out corresponding subject if possible
+    # need to read topics again
+    topics_raw = read_jsonl(fp_of_subjects)
+    replacements = enhance_replacements_w_new_subjects(replacements, topics_raw)  # noqa
 
-    fp_of_deprecated = (
-        parameters["output_file"] or
-        Path.cwd() / "deprecated_lcsh.csv"
-    )
-
-    header = ["id", "time", "subject", "new_id", "new_subject", "notes"]
-
-    write_csv(
-        deprecations, fp_of_deprecated, writer_kwargs={"fieldnames": header}
-    )
-
-    print(f"LCSH deprecated written here {fp_of_deprecated}")
-
-
-@lcsh.command("replacements")
-@click.argument(
-    "deprecated-file",
-    type=click.Path(path_type=Path, exists=True, dir_okay=False),
-)
-@click.option("--output-file", "-o", type=click.Path(path_type=Path))
-def lcsh_replacements(**parameters):
-    """Generate CSV file of replaced LCSH topics.
-
-    Warning: this file has to be reviewed/edited by metadata expert to fill
-             out potentially absent "new_subject" field.
-
-    This file is used in lcsh_deltas.
-    """
-    fp_of_deprecated = parameters["deprecated_file"].expanduser()
-
-    deprecations = read_csv(fp_of_deprecated)
-    replacements = (d for d in deprecations if d.get("new_id"))
-
-    fp_of_replacements = (
-        parameters["output_file"] or
-        fp_of_deprecated.parent / "replacements_lcsh.csv"
-    )
-
-    header = ["id", "time", "subject", "new_id", "new_subject", "notes"]
+    header = ["time", "id", "subject", "new_id", "new_subject", "notes"]
 
     write_csv(
-        replacements, fp_of_replacements, writer_kwargs={"fieldnames": header}
+        replacements,
+        parameters["output_file"],
+        writer_kwargs={"fieldnames": header},
     )
 
-    print(f"LCSH replacements written here {fp_of_replacements}")
+    print(f"LCSH replacements written here {parameters['output_file']}")
 
 
 @lcsh.command("deltas")

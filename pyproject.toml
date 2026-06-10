@@ -14,11 +14,6 @@ classifiers = [
     "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
     "galter-subjects-utils>=0.9.0,<2.0",
@@ -28,9 +23,9 @@ keywords = ["invenio", "inveniordm", "subjects", "LCSH"]
 license = "MIT"
 name = "invenio-subjects-lcsh"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 urls = {Repository = "https://github.com/galterlibrary/invenio-subjects-lcsh"}
-version = "2026.1.23.1"
+version = "2026.6.4.0"
 
 [project.optional-dependencies]
 dev = [
@@ -56,6 +51,21 @@ invenio_subjects_lcsh = "invenio_subjects_lcsh.vocabularies"
 [project.entry-points."galter_subjects_utils.cli"]
 invenio_subjects_lcsh = "invenio_subjects_lcsh.cli:lcsh"
 
+[tool.check-manifest]
+ignore = [
+    ".*-requirements.txt",
+    "*.bin",
+    "*.gitkeep",
+    ".venv/",
+    ".editorconfig",
+    ".github/",
+    "tasks.py"
+]
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+
 [tool.setuptools]
 packages = ["invenio_subjects_lcsh", "invenio_subjects_lcsh.vocabularies"]
 
@@ -70,23 +80,11 @@ conflicts = [
     ],
 ]
 
-
-[tool.check-manifest]
-ignore = [
-    ".*-requirements.txt",
-    "*.bin",
-    "*.gitkeep",
-    ".venv/",
-    ".editorconfig",
-    ".github/",
-    "tasks.py"
-]
+[tool.pydocstyle]
+add_ignore = ["D401"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
 # ATTN: Remove the cov options when using breakpoint() since it interferes
 addopts = '--isort --pydocstyle --pycodestyle --doctest-glob="*.rst" --doctest-modules --cov=invenio_subjects_lcsh --cov-report=term-missing'
 testpaths = ["tests", "invenio_subjects_lcsh"]
-
-[tool.pydocstyle]
-add_ignore = ["D401"]
