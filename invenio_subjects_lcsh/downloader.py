@@ -16,7 +16,7 @@ class LCSHDownloader:
 
     def __init__(self, directory, cache=False):
         """Constructor."""
-        self.base_url = "https://id.loc.gov/download/authorities/subjects.skosrdf.jsonld.gz"  # noqa
+        self.base_url = "https://id.loc.gov/download/authorities/subjects.madsrdf.jsonld.gz"  # noqa
         self.directory = directory
         self.cache = cache
 

@@ -40,11 +40,11 @@ def test_downloader(patched_get, tmp_path):
 
     patched_get.assert_called()
     assert (
-        downloads_dir / "subjects.skosrdf.jsonld.gz" ==
+        downloads_dir / "subjects.madsrdf.jsonld.gz" ==
         downloader.downloaded_filepath
     )
     assert (
-        downloads_dir / "subjects.skosrdf.jsonld" ==
+        downloads_dir / "subjects.madsrdf.jsonld" ==
         downloader.terms_filepath
     )
 
@@ -55,10 +55,10 @@ def test_downloader(patched_get, tmp_path):
 
     patched_get.assert_not_called()
     assert (
-        downloads_dir / "subjects.skosrdf.jsonld.gz" ==
+        downloads_dir / "subjects.madsrdf.jsonld.gz" ==
         downloader.downloaded_filepath
     )
     assert (
-        downloads_dir / "subjects.skosrdf.jsonld" ==
+        downloads_dir / "subjects.madsrdf.jsonld" ==
         downloader.terms_filepath
     )
