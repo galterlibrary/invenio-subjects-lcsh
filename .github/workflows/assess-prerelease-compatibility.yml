@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2023-2025 Northwestern University.
+# Copyright (C) 2023-2026 Northwestern University.
 #
 
 # Make sure to subscribe to notifications
@@ -12,8 +12,8 @@ name: Assess compatibility with pre-release version of InvenioRDM
 on:
   schedule:
     # * is a special character in YAML so you have to quote this string
-    # Run every Wednesday at 6:04am UTC (1:04 am EDT)
-    - cron: "4 6 * * 3"
+    # Run every Wednesday at 6:05am UTC (1:05 am EDT)
+    - cron: "5 6 * * 3"
   workflow_dispatch:
     inputs:
       reason:
@@ -22,4 +22,4 @@ on:
         default: "Manual trigger"
 jobs:
   assess-prerelease:
-    uses: galterlibrary/reusable-workflows/.github/workflows/inveniordm-assess-prerelease-compatibility.yml@main
+    uses: galterlibrary/reusable-workflows/.github/workflows/inveniordm-python-assess-prerelease-compatibility.yml@main
