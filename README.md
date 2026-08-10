@@ -15,7 +15,7 @@ Note that this list excludes `-781` geographical variations as it's not their or
 From your instance directory:
 
 ```bash
-pipenv install invenio-subjects-lcsh
+uv add invenio-subjects-lcsh
 ```
 
 This will add it to your Pipfile.
@@ -100,57 +100,27 @@ When you are happy with the list, bump the version in `pyproject.toml` and relea
 
 ## Development
 
-Install the project in editable mode with `dev` dependencies in an isolated virtualenv (`(venv)` denotes that going forward):
+Install the project in editable mode with `dev` dependencies in an isolated virtualenv:
 
 ```bash
-(venv) pip install -e .[dev]
-# or if using pipenv
-pipenv run pip install -e .[dev]
-# or if using uv
-uv venv
+uv venv --python 3.14
 uv pip install -e .[dev]
 ```
 
 Run tests:
 
 ```bash
-(venv) invoke test
-# or shorter
-(venv) inv test
-# or if using pipenv
-pipenv run inv test
-# or if using uv
 uv run inv test
 ```
 
 Test compatibility with the pre-release version of InvenioRDM (invenio-app-rdm):
 
 ```bash
-# Step 1 - install the pre-release dependencies
-(venv) pip install --pre -e .[dev_pre]
-# Step 2 - Run the pre-release tests
-(venv) inv test
-# if using uv run:
 uv run --extra dev_pre --prerelease=allow inv test
-```
-
-
-Check manifest:
-
-```bash
-(venv) inv check-manifest
-# or if using pipenv
-pipenv run inv check-manifest
-# or if using uv
-uv run inv check-manifest
 ```
 
 Clean out artefacts:
 
 ```bash
-(venv) inv clean
-# or if using pipenv
-pipenv run inv clean
-# or if using uv
 uv run inv clean
 ```
