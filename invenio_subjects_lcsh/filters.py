@@ -12,6 +12,8 @@
 def non_geographic_filter(internal_entry):
     """Filter for non geographic LCSH term.
 
+    Geographic LCSH terms are identified by the -781 identifier suffix.
+
     Args:
         internal_entry (dict - internal entry shape): read LCSH
 
