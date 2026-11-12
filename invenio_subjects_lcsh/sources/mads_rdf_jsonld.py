@@ -100,7 +100,7 @@ def main_node_get_replacement_ids(node_main):
     """
     # can be a dict when a single value is recommended
     use_instead = node_get_list(node_main, "madsrdf:useInstead")
-    ids = [node_get_id(n) for n in use_instead]
+    ids = [n.get("@id", "") for n in use_instead]
     ids_replacement = filter(None, ids)
     return list(ids_replacement)
 

@@ -53,10 +53,10 @@ class LCSHMadsRdfJsonLdReader:
                     node_main.get("madsrdf:deletionNote", {}).get("@value", "")
                 ),
                 "replacements": main_node_get_replacement_ids(node_main),
-                "at": (
+                "time": (
                     node_deprecation
                     .get("ri:recordChangeDate", {})
-                    .get("@value")
+                    .get("@value", "")
                 ),
             },
             "collections": [

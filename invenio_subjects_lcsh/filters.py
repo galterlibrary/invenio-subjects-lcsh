@@ -7,6 +7,8 @@
 
 """Filters for read LCSH internal entries."""
 
+import datetime as dt
+
 
 def non_geographic_filter(internal_entry):
     """Filter for non geographic LCSH term.
@@ -64,3 +66,26 @@ def valid_heading_filter(internal_entry):
         and not deprecated_filter(internal_entry)
         and authorized_heading_filter(internal_entry)
     )
+
+
+def deprecated_since_filter(internal_entry, since=None):
+    """Filter for deprecated LCSH term since.
+
+    If since is None, this is equivalent to deprecated_filter.
+
+    Args:
+        internal_entry (dict - internal entry shape): read LCSH
+        since (datetime.datetime, optional): since datetime. Defaults to None.
+
+        boolean: True if deprecated since, False otherwise
+    """
+    if deprecated_filter(internal_entry):
+        time_str = internal_entry["deprecated"]["time"]
+
+        if not since or not time_str:
+            return True
+
+        time_dt = dt.datetime.fromisoformat(time_str)
+        return since <= time_dt
+    else:
+        return False

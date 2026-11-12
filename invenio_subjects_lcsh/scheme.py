@@ -19,3 +19,34 @@ class LCSHScheme(Scheme):
             name="LCSH",
             prefix="https://id.loc.gov/authorities/subjects/"
         )
+
+class LCNAFScheme(Scheme):
+    """LCNAF scheme."""
+
+    def __init__(self):
+        """Constructor."""
+        super().__init__(
+            name="LCNAF",
+            prefix="https://id.loc.gov/authorities/names/",
+        )
+
+
+KNOWN_SCHEMES = [
+    LCSHScheme(),
+    LCNAFScheme(),
+]
+
+
+def identify_scheme(id_of_rdm_entry):
+    """Identify scheme name of given internal entry id.
+
+    Args:
+        id_of_rdm_entry (str): internal entry id
+
+    Returns:
+        str: Scheme name of id
+    """
+    for scheme in KNOWN_SCHEMES:
+        if id_of_rdm_entry.startswith(scheme.prefix):
+            return scheme.name
+    return ""
