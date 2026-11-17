@@ -25,7 +25,7 @@ name = "invenio-subjects-lcsh"
 readme = "README.md"
 requires-python = ">=3.11"
 urls = {Repository = "https://github.com/galterlibrary/invenio-subjects-lcsh"}
-version = "2026.10.30.0"
+version = "2026.11.18.0"
 
 [project.optional-dependencies]
 dev = [

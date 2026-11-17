@@ -216,11 +216,11 @@ def lcsh_deltas(**parameters):
     """Write LCSH subject delta operations to file."""
     print("Generating deltas...")
     lcsh = LCSHScheme()
+    subject_rdm_serdes = SubjectRDMSerdes()
 
     # Source subjects
-    subjects_rdm_preexisting = get_rdm_subjects(scheme=lcsh.name)
-    subject_rdm_serdes = SubjectRDMSerdes()
-    src = (subject_rdm_serdes.deserialize(s) for s in subjects_rdm_preexisting)
+    subjects_rdm_src = get_rdm_subjects(scheme=lcsh.name)
+    src = (subject_rdm_serdes.deserialize(s) for s in subjects_rdm_src)
 
     # Destination subjects
     # The generated file actually

@@ -77,7 +77,8 @@ invenio galter_subjects update /path/to/deltas_lcsh.csv
 > [!WARNING]
 > Both `galter_subjects lcsh replacements` and `galter_subjects lcsh deltas` use the vendored subjects
 > file as a source of label for replacement subjects. This could be out-of-steps with a fresh download,
-> so use `--lcsh <path to fresh subjects file>` to override it if need be.
+> so use `--lcsh <path to fresh subjects file>` in `invenio galter_subjects lcsh replacements` and
+> use `--subjects-file <path to fresh subjects file>` in `invenio galter_subjects lcsh deltas`.
 
 Look at the help text for these commands to see additional options that can be passed.
 In particular, options for `galter_subjects update` allow you to store renamed, replaced or removed subjects on records according to a template of your choice.
