@@ -12,14 +12,16 @@ from pathlib import Path
 
 import click
 from flask.cli import with_appcontext
-from galter_subjects_utils.adapter import converted_to_subjects
-from galter_subjects_utils.deltor import DeltasGenerator
-from galter_subjects_utils.keeptrace import KeepTrace
+from galter_subjects_utils.deltas_generators import DeltasGenerator
 from galter_subjects_utils.reader import get_rdm_subjects, read_csv
+from galter_subjects_utils.serdes import DeltaSerdes, SubjectRDMSerdes
 from galter_subjects_utils.writer import write_csv
 
-from .adapter import generate_replacements
-from .converters import LCSHRDMConverter, LCSHReplacementConverter
+from .converters import (
+    LCSHRDMConverter,
+    LCSHReplacementConverter,
+    ToDeltasGeneratorReplacementsConverter,
+)
 from .downloader import LCSHDownloader
 from .filters import (
     deprecated_since_filter,
@@ -193,8 +195,9 @@ def lcsh_replacements(**parameters):
 
 @lcsh.command("deltas")
 @click.option(
-    "--lcsh",
-    type=click.Path(path_type=Path),
+    "--subjects-file",
+    "-s",
+    type=click.Path(path_type=Path, exists=True, dir_okay=False),
     default=Path(__file__).parent / "vocabularies/subjects_lcsh.csv",
 )
 @click.option(
@@ -216,32 +219,26 @@ def lcsh_deltas(**parameters):
 
     # Source subjects
     subjects_rdm_preexisting = get_rdm_subjects(scheme=lcsh.name)
-    src = converted_to_subjects(
-        subjects_rdm_preexisting,
-        prefix=lcsh.prefix,
-    )
+    subject_rdm_serdes = SubjectRDMSerdes()
+    src = (subject_rdm_serdes.deserialize(s) for s in subjects_rdm_preexisting)
 
     # Destination subjects
     # The generated file actually
-    subjects_rdm = read_csv(parameters["lcsh"])
-    dst = converted_to_subjects(subjects_rdm, prefix=lcsh.prefix)
+    subjects_rdm_dst = read_csv(parameters["subjects_file"])
+    dst = (subject_rdm_serdes.deserialize(s) for s in subjects_rdm_dst)
 
     # Replacements
-    replacements_lcsh = read_csv(parameters["replacements_file"])
-    replacements = generate_replacements(replacements_lcsh)
+    replacements_lcsh_raw = read_csv(parameters["replacements_file"])
+    replacements = ToDeltasGeneratorReplacementsConverter(
+        replacements_lcsh_raw
+    ).convert()
 
     deltas_generator = DeltasGenerator(
         src_subjects=src,
         dst_subjects=dst,
         replacements=replacements,
     )
-    deltas = list(deltas_generator.iter_deltas())
-    # in-place
-    KeepTrace.mark(
-        deltas,
-        # only can keep trace of *those* anyway
-        yes_logic=lambda delta: delta["type"] in ["edit", "replace", "remove"],
-    )
+    deltas = deltas_generator.iter_deltas()
 
     fp_of_deltas = parameters["output_file"]
     header = [
@@ -254,8 +251,10 @@ def lcsh_deltas(**parameters):
         "subject_dst",
         "keep_trace",
     ]
+    delta_serdes = DeltaSerdes()
+    deltas_serialized = (delta_serdes.serialize(d) for d in deltas)
     write_csv(
-        deltas,
+        deltas_serialized,
         fp_of_deltas,
         writer_kwargs={"fieldnames": header},
     )

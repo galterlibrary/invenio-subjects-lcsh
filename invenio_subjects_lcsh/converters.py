@@ -9,6 +9,8 @@
 
 from itertools import chain, takewhile
 
+from galter_subjects_utils.serdes import SubjectsDstSerdes, SubjectSrcSerdes
+
 from .scheme import LCSHScheme, identify_scheme
 
 
@@ -188,3 +190,44 @@ class LCSHReplacementConverter:
                 for id_ in id_to_label if not id_to_label[id_]
             ),
         )
+
+
+class ToDeltasGeneratorReplacementsConverter:
+    """Converter to convert raw replacements dict to replacement dict.
+
+    A replacement dict is dict[Subject, list[Subject]] in this case.
+    """
+    def __init__(self, replacement_dicts):
+        """Constructor.
+
+        Args:
+            replacement_dicts (iter[dict - internal entry shape]):
+                replacement dicts (as typically read from file)
+        """
+        self._replacement_dicts = replacement_dicts
+
+    def convert(self):
+        """Perform conversion.
+
+        Produces a replacement dict as accepted by DeltasGenerator.
+
+        Returns:
+            dict[Subject, list[Subject]]: replacement dict
+        """
+        result = {}
+        subject_src_serdes = SubjectSrcSerdes()
+        subjects_dst_serdes = SubjectsDstSerdes()
+        for replacement_dict in self._replacement_dicts:
+            # Source
+            subject_src = subject_src_serdes.deserialize(replacement_dict)
+
+            # Destination
+            # add type to be able to use SubjectsDstSerdes
+            replacement_dict_tmp = {**replacement_dict, "type": "replace"}
+            subjects_dst = list(
+                subjects_dst_serdes.deserialize(replacement_dict_tmp)
+            )
+
+            result[subject_src] = subjects_dst
+
+        return result

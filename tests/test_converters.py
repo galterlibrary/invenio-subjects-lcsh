@@ -10,10 +10,12 @@
 from pathlib import Path
 
 from galter_subjects_utils.reader import read_csv
+from galter_subjects_utils.types_internal import Subject
 
 from invenio_subjects_lcsh.converters import (
     LCSHRDMConverter,
     LCSHReplacementConverter,
+    ToDeltasGeneratorReplacementsConverter,
 )
 
 
@@ -200,3 +202,39 @@ def test_replacement_converter_missing_label(deprecated_internal_entries):
         "http://id.loc.gov/authorities/subjects/sh2006005259"
     )
     assert [id_missing_label_expected] == ids_missing_labels_list
+
+
+def test_to_deltas_generator_replacements_converter():
+    replacements = ToDeltasGeneratorReplacementsConverter(
+        [
+            {
+                "time": "2021-07-20T08:25:20",
+                "id_src": "https://id.loc.gov/authorities/subjects/sh00000273",
+                "scheme_src": "LCSH",
+                "subject_src": "Child concentration camp inmates",
+                "id_dst": "https://id.loc.gov/authorities/subjects/sh2021004026\nhttps://id.loc.gov/authorities/subjects/sh2021004027",  # noqa
+                "scheme_dst": "LCSH\nLCSH",
+                "subject_dst": "Child internment camp inmates\nChild Nazi concentration camp inmates",  # noqa
+                "notes": "...",
+            },
+        ]
+    ).convert()
+
+    subject_src = Subject(
+        id="https://id.loc.gov/authorities/subjects/sh00000273",
+        scheme="LCSH",
+        label="Child concentration camp inmates",
+    )
+    subject_dst_1 = Subject(
+        id="https://id.loc.gov/authorities/subjects/sh2021004026",
+        scheme="LCSH",
+        label="Child internment camp inmates",
+    )
+    subject_dst_2 = Subject(
+        id="https://id.loc.gov/authorities/subjects/sh2021004027",
+        scheme="LCSH",
+        label="Child Nazi concentration camp inmates",
+    )
+
+    expected = {subject_src: [subject_dst_1, subject_dst_2]}
+    assert expected == replacements
