@@ -1,5 +1,14 @@
 # Changes
 
+**Version 2026.11.18.0 (released 2026-XX-YY)**
+*Breaking changes*
+- use new delta generator to produce the deltas file: changed csv format and changed CLI command interface
+- generate replacements file with optional LCNAF terms and multi-replace: changed csv format and changed CLI interface
+
+*Regular changes*
+- lint: switch to ruff for linting
+- align download + file with MeSH approach
+
 **Version 2026.6.4.3 (released 2026-08-11)**
 
 - make compatible with InvenioRDM v14
