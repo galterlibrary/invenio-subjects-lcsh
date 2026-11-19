@@ -1,5 +1,9 @@
 # Changes
 
+**Version 2026.6.4.4 (released 2026-11-19)**
+
+- Shields it from galter-subjects-utils 0.12.0 that brings breaking changes
+
 **Version 2026.6.4.3 (released 2026-08-11)**
 
 - make compatible with InvenioRDM v14
